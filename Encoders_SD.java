@@ -1,4 +1,4 @@
-/*ATTENTION: THIS PROGRAM HAS NOT BEEN TRIED OUT ON THE ROBOT!!!
+/*ATTENTION: THIS PROGRAM HAS NOT BEEN TRIED OUT ON THE ROBOT!
 HAVE THIS REVIEWED BY SOMEONE ELSE BEFORE RUNNING THE PROGRAM
 TO MAKE SURE MOTORS, ENCODERS, AND HUB DON'T GET DAMAGED*/
 
@@ -12,6 +12,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import static org.firstinspires.ftc.teamcode.Encoders_SD.robotMotion.armDown;
+import static org.firstinspires.ftc.teamcode.Encoders_SD.robotMotion.armUp;
+
 
 @Autonomous
 //file's main class inheriting LinearOpMode
@@ -30,7 +34,7 @@ public class Encoders_SD extends LinearOpMode
     // NOTE: armUp and armDown is for intake/outtake
     public enum robotMotion
     {
-        forward, backward, right, left, armUp, armDown
+        right, left, armUp, armDown
 
     }
 
@@ -51,6 +55,7 @@ public class Encoders_SD extends LinearOpMode
         FR.setDirection(DcMotorSimple.Direction.FORWARD);
         FL.setDirection(DcMotorSimple.Direction.REVERSE);
         // Arm.setDirection() (to be determined!)
+        Arm.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // set mode for EACH motor, TODO: setMode for Arm
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -79,8 +84,12 @@ public class Encoders_SD extends LinearOpMode
         waitForStart();
 
         // TODO: AUTON CODE GOES HERE!!
-        // I didn't get introduced to auton so this is blank for now
-
+        // added in some sample auton
+        forward(36,0.35);
+        //drop spike
+        movementRL(robotMotion.right, 28, 0.35);
+        //drop spike
+        robotsleep(0,0.0);
 
     }
 
@@ -94,10 +103,10 @@ public class Encoders_SD extends LinearOpMode
         int current_BR = BR.getCurrentPosition();
         int current_BL = BL.getCurrentPosition();
 
-        int new_FR = current_FR +(int)(cpi*inch);
-        int new_FL = current_FL +(int)(cpi*inch);
-        int new_BR = current_BR +(int)(cpi*inch);
-        int new_BL = current_BL +(int)(cpi*inch);
+        int new_FR = current_FR + (int)(cpi*inch);
+        int new_FL = current_FL + (int)(cpi*inch);
+        int new_BR = current_BR + (int)(cpi*inch);
+        int new_BL = current_BL + (int)(cpi*inch);
 
 
 
@@ -131,10 +140,14 @@ public class Encoders_SD extends LinearOpMode
         while (FL.isBusy() && FR.isBusy() && BR.isBusy() && BL.isBusy())
         {
             telemetry.addLine("Moving Forward...");
-            telemetry.addData("FR: ", FR.getCurrentPosition());
-            telemetry.addData("FL: ", FL.getCurrentPosition());
-            telemetry.addData("BR: ", BR.getCurrentPosition());
-            telemetry.addData("BL: ", BL.getCurrentPosition());
+            telemetry.addData("FR current: ", FR.getCurrentPosition());
+            telemetry.addData("FR target: ", new_FR);
+            telemetry.addData("FL current: ", FL.getCurrentPosition());
+            telemetry.addData("FL target: ", new_FL);
+            telemetry.addData("BR current: ", BR.getCurrentPosition());
+            telemetry.addData("BR target: ", new_BR);
+            telemetry.addData("BL current: ", BL.getCurrentPosition());
+            telemetry.addData("BL target: ", new_BL);
 
         }
 
@@ -154,10 +167,10 @@ public class Encoders_SD extends LinearOpMode
         int current_BR = BR.getCurrentPosition();
         int current_BL = BL.getCurrentPosition();
 
-        int new_FR = current_FR +(int)(cpi*inch);
-        int new_FL = current_FL +(int)(cpi*inch);
-        int new_BR = current_BR +(int)(cpi*inch);
-        int new_BL = current_BL +(int)(cpi*inch);
+        int new_FR = current_FR - (int)(cpi*inch);
+        int new_FL = current_FL - (int)(cpi*inch);
+        int new_BR = current_BR - (int)(cpi*inch);
+        int new_BL = current_BL - (int)(cpi*inch);
 
 
         // sets new position for motors, use setTargetPosition()
@@ -191,10 +204,14 @@ public class Encoders_SD extends LinearOpMode
         while (FL.isBusy() && FR.isBusy() && BL.isBusy() && BR.isBusy())
         {
             telemetry.addLine("Moving Backward...");
-            telemetry.addData("FR: ", FR.getCurrentPosition());
-            telemetry.addData("FL: ", FL.getCurrentPosition());
-            telemetry.addData("BR: ", BR.getCurrentPosition());
-            telemetry.addData("BL: ", BL.getCurrentPosition());
+            telemetry.addData("FR current: ", FR.getCurrentPosition());
+            telemetry.addData("FR target: ", new_FR);
+            telemetry.addData("FL current: ", FL.getCurrentPosition());
+            telemetry.addData("FL target: ", new_FL);
+            telemetry.addData("BR current: ", BR.getCurrentPosition());
+            telemetry.addData("BR target: ", new_BR);
+            telemetry.addData("BL current: ", BL.getCurrentPosition());
+            telemetry.addData("BL target: ", new_BL);
         }
 
         // stop motors
@@ -212,36 +229,31 @@ public class Encoders_SD extends LinearOpMode
         int current_BR = BR.getCurrentPosition();
         int current_BL = BL.getCurrentPosition();
 
-        int new_FR = current_FR +(int)(cpi*inch);
-        int new_FL = current_FL +(int)(cpi*inch);
-        int new_BR = current_BR +(int)(cpi*inch);
-        int new_BL = current_BL +(int)(cpi*inch);
-
 
         // sets new position for motors, use setTargetPosition()
         // TODO: complete for each WHEEL motor
         //added in pos for each motor
 
-        FL.setTargetPosition(new_FL);
-        FR.setTargetPosition(new_FR);
-        BL.setTargetPosition(new_BL);
-        BR.setTargetPosition(new_BR);
 
         if(action == robotMotion.left)
         {
+            int new_FR = current_FR + (int)(cpi*inch);
+            int new_FL = current_FL - (int)(cpi*inch);
+            int new_BR = current_BR - (int)(cpi*inch);
+            int new_BL = current_BL + (int)(cpi*inch);
             // sets desired power for motors
             // added in pwr for each motor
-            FL.setPower(power*-1);
             FR.setPower(power);
-            BL.setPower(power);
+            FL.setPower(power*-1);
             BR.setPower(power*-1);
+            BL.setPower(power);
 
             // sets motors to RUN_TO_POSITION
             // added in run to position for each motor
-            FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
 
@@ -251,10 +263,14 @@ public class Encoders_SD extends LinearOpMode
             while (FL.isBusy() && FR.isBusy() && BR.isBusy() && BL.isBusy())
             {
                 telemetry.addLine("Moving Left...");
-                telemetry.addData("FR: ", FR.getCurrentPosition());
-                telemetry.addData("FL: ", FL.getCurrentPosition());
-                telemetry.addData("BR: ", BR.getCurrentPosition());
-                telemetry.addData("BL: ", BL.getCurrentPosition());
+                telemetry.addData("FR current: ", FR.getCurrentPosition());
+                telemetry.addData("FR target: ", new_FR);
+                telemetry.addData("FL current: ", FL.getCurrentPosition());
+                telemetry.addData("FL target: ", new_FL);
+                telemetry.addData("BR current: ", BR.getCurrentPosition());
+                telemetry.addData("BR target: ", new_BR);
+                telemetry.addData("BL current: ", BL.getCurrentPosition());
+                telemetry.addData("BL target: ", new_BL);
 
             }
 
@@ -268,10 +284,16 @@ public class Encoders_SD extends LinearOpMode
         {
             // sets desired power for motors
             //added in pwr for each motor
-            FL.setPower(power);
+            int new_FR = current_FR - (int)(cpi*inch);
+            int new_FL = current_FL + (int)(cpi*inch);
+            int new_BR = current_BR + (int)(cpi*inch);
+            int new_BL = current_BL - (int)(cpi*inch);
+            // sets desired power for motors
+            // added in pwr for each motor
             FR.setPower(power*-1);
-            BL.setPower(power*-1);
+            FL.setPower(power);
             BR.setPower(power);
+            BL.setPower(power*-1);
 
             // sets motors to RUN_TO_POSITION
             // added in run to position for each motor
@@ -288,15 +310,42 @@ public class Encoders_SD extends LinearOpMode
             while (FL.isBusy() && FR.isBusy() && BR.isBusy() && BL.isBusy())
             {
                 telemetry.addLine("Moving Right...");
-                telemetry.addData("FR: ", FR.getCurrentPosition());
-                telemetry.addData("FL: ", FL.getCurrentPosition());
-                telemetry.addData("BR: ", BR.getCurrentPosition());
-                telemetry.addData("BL: ", BL.getCurrentPosition());
+                telemetry.addData("FR current: ", FR.getCurrentPosition());
+                telemetry.addData("FR target: ", new_FR);
+                telemetry.addData("FL current: ", FL.getCurrentPosition());
+                telemetry.addData("FL target: ", new_FL);
+                telemetry.addData("BR current: ", BR.getCurrentPosition());
+                telemetry.addData("BR target: ", new_BR);
+                telemetry.addData("BL current: ", BL.getCurrentPosition());
+                telemetry.addData("BL target: ", new_BL);
 
             }
 
         }
 
+    }
+    // TODO: function for arm attachment
+    private void armMovement (robotMotion action, double degree, double power)
+    {
+        if (action == armUp){
+            //open arm
+        }
+        else if (action == armDown){
+            // close arm
+        }
+    }
+
+    // TODO: function for claw movement
+    private void clawMovement (boolean state)
+    {
+        if (state == true)
+        {
+            // open claw
+        }
+        else
+        {
+            // close claw
+        }
     }
 
     // NOTE: This is important, do NOT delete!
@@ -309,7 +358,6 @@ public class Encoders_SD extends LinearOpMode
         // ADDED IN ARM PWR TO 0
         Arm.setPower(0);
     }
-
 }
 
 /* to add in:
