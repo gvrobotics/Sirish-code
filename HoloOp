@@ -5,8 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.Range;
-
 @TeleOp
 public class HoloOp extends OpMode
 {
@@ -14,6 +12,8 @@ public class HoloOp extends OpMode
 
     private DcMotor FL, BL, FR, BR;
     private DcMotor Arm;
+
+    public Servo Launcher;
 
     public double angle, magnitude;
 
@@ -25,13 +25,13 @@ public class HoloOp extends OpMode
         FR = hardwareMap.get(DcMotor.class, "FR");
         FL = hardwareMap.get(DcMotor.class, "FL");
         Arm = hardwareMap.get(DcMotor.class, "Arm");
-
-        BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        BL.setDirection(DcMotorSimple.Direction.FORWARD);
-        FR.setDirection(DcMotorSimple.Direction.REVERSE);
-        FL.setDirection(DcMotorSimple.Direction.FORWARD);
+        Launcher = hardwareMap.get(Servo.class, "Arm");
+        BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        BR.setDirection(DcMotorSimple.Direction.FORWARD);
+        FL.setDirection(DcMotorSimple.Direction.REVERSE);
+        FR.setDirection(DcMotorSimple.Direction.FORWARD);
         Arm.setDirection(DcMotorSimple.Direction.FORWARD);
-
+        Launcher.setPosition(0);
 
         BR.setPower(0);
         BL.setPower(0);
@@ -83,20 +83,33 @@ public class HoloOp extends OpMode
                 }
             }
         }
-        if (gamepad1.dpad_up) {
-            Arm.setPower(0.3);
+        public int i = 0
+        if (gamepad2.dpad_up) {
+            Arm.setPower(0.2);
+            i+=1
         }
         else{
             Arm.setPower(0);
         }
-        if (gamepad1.dpad_down)
+        if (gamepad2.dpad_down)
         {
-            Arm.setPower(-0.3);
-        }
+            Arm.setPower(-0.2);
+            if (i>50)
+            {
+                Arm.setPower(0.1)
+
+            }
+            }
         else{
             Arm.setPower(0);
         }
 
+        if(gamepad2.a){
+            Launcher.setPosition(-0.5);
+        }
+        else{
+            Launcher.setPosition(0);
+        }
         telemetry.addData("RX", "%.2f", powerRX);
         telemetry.addData("RY", "%.2f", powerRY);
         telemetry.addData("Angle", "%.2f", angle);
