@@ -1,0 +1,105 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+
+@TeleOp
+public class Tele extends OpMode
+{
+    public DcMotor BR, BL, FR, FL, IT;
+    //  new motor IT for intake
+    public boolean xPressed = false;
+    private double powerRY, powerRX, powerLX, powerLY, robotAngle, PowerMultiplier, fl, br, fr, bl, it
+
+    @Override
+    public void init()
+    {
+        BR = hardwareMap.get(DcMotor.class, "BR");
+        BL = hardwareMap.get(DcMotor.class, "BL");
+        FR = hardwareMap.get(DcMotor.class, "FR");
+        FL = hardwareMap.get(DcMotor.class, "FL");
+        IT = hardwareMap.get(DcMotor.class, "IT");
+
+
+        BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        BL.setDirection(DcMotorSimple.Direction.FORWARD);
+        FR.setDirection(DcMotorSimple.Direction.REVERSE);
+        FL.setDirection(DcMotorSimple.Direction.FORWARD);
+        IT.setDirection(DcMotorSimple.Direction.FORWARD);
+
+
+        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        IT.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        BR.setPower(0);
+        BL.setPower(0);
+        FR.setPower(0);
+        FL.setPower(0);
+        IT.setPower(0);
+    }
+
+
+    @Override
+    public void loop()
+    {
+        powerLX = gamepad1.left_stick_x/1.4;
+        powerLY = gamepad1.left_stick_y/1.4;
+        powerRX = gamepad1.right_stick_x/1.4;
+        //powerRY is unused for calcs lol
+        powerRY = gamepad1.right_stick_y/1.4;
+
+
+        robotAngle = Math.atan2(powerLX, powerLY);
+        telemetry.addData("Robot angle:", robotAngle);
+        telemetry.addData("powerRX: ", gamepad1.right_stick_x);
+        telemetry.addData("powerRY: ", gamepad1.right_stick_y);
+        telemetry.addData("powerLX: ", gamepad1.left_stick_x);
+        telemetry.addData("powerLY: ", gamepad1.left_stick_y);
+
+
+        telemetry.addData("BR: ", BR.getPower());
+        telemetry.addData("BL: ", BL.getPower());
+        telemetry.addData("FR: ", FR.getPower());
+        telemetry.addData("FL: ", FL.getPower());
+        telemetry.addData("IT: ", IT.getPower());
+        telemetry.update();
+
+
+        PowerMultiplier = Math.sqrt((Math.pow(powerLX, 2) + Math.pow(powerLY, 2)));
+
+
+        fl = (PowerMultiplier*-1*(Math.sin(robotAngle-(Math.PI/4)))) - powerRX;
+        br = (PowerMultiplier*-1*(Math.sin(robotAngle-(Math.PI/4)))) + powerRX;
+        bl = (PowerMultiplier*(Math.sin(robotAngle+(Math.PI/4)))) - powerRX;
+        fr = (PowerMultiplier*(Math.sin(robotAngle+(Math.PI/4)))) + powerRX;
+        
+        //X button should now toggle the intake (IT) motor to continuously rotate
+        
+        if (gamepad1.xWasPressed()){
+            xPressed = !xPressed;
+        }
+        
+        if (xPressed) {
+            
+            it = 50;
+        }
+        else {
+            it = 0;
+        }
+        
+
+        BR.setPower(br);
+        BL.setPower(bl);
+        FR.setPower(fr);
+        FL.setPower(fl);
+        IT.setPower(it);
+        
+    }
+}
+
