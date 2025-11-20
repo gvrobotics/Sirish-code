@@ -19,11 +19,11 @@ public class Midton extends LinearOpMode {
     {
         right, left
     }
-        public void goToPosition(DcMotor motor, int target, double kp, double kl, double kd, OpMode opmode) {
+        public void setPowerPID(DcMotor motor, int target, double kp, double kl, double kd, OpMode opmode) {
             // kp/kl/kd is input, p/l/d is output
             ElapsedTime timer = new ElapsedTime();
 
-            // IF CHANGING ALGORITHM PARAMETERS 
+            // IF CHANGING ALGORITHM PARAMETERS
             //MOE = margin of error (in ticks)
             int MOE = 3;
             double previousTime = 0, previousError = 0;
@@ -147,10 +147,10 @@ public class Midton extends LinearOpMode {
         FR.setTargetPosition(d);
 
         // sets desired power for motors
-        BR.goToPosition(power);
-        BL.goToPosition(power);
-        FR.goToPosition(power);
-        FL.goToPosition(power);
+        BR.setPowerPID(power);
+        BL.setPowerPID(power);
+        FR.setPowerPID(power);
+        FL.setPowerPID(power);
 
         // make motors run to position
         BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -195,10 +195,10 @@ public class Midton extends LinearOpMode {
         FL.setTargetPosition(d);
 
         // sets desired power for motors
-        BR.goToPosition(power);
-        BL.goToPosition(power);
-        FR.goToPosition(power);
-        FL.goToPosition(power);
+        BR.setPowerPID(power);
+        BL.setPowerPID(power);
+        FR.setPowerPID(power);
+        FL.setPowerPID(power);
 
         // make motors run to position
         BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -237,10 +237,10 @@ public class Midton extends LinearOpMode {
         FL.setTargetPosition((int) (FL.getCurrentPosition() - (inch * cpi)));
 
         // sets desired power for motors
-        BR.goToPosition(-power);
-        BL.goToPosition(power);
-        FR.goToPosition(power);
-        FL.goToPosition(-power);
+        BR.setPowerPID(-power);
+        BL.setPowerPID(power);
+        FR.setPowerPID(power);
+        FL.setPowerPID(-power);
 
         // make motors run to position
         BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -279,10 +279,10 @@ public class Midton extends LinearOpMode {
         FL.setTargetPosition((int) (FL.getCurrentPosition() + (inch * cpi)));
 
         // sets desired power for motors
-        BR.goToPosition(power);
-        BL.goToPosition(-power);
-        FR.goToPosition(-power);
-        FL.goToPosition(power);
+        BR.setPowerPID(power);
+        BL.setPowerPID(-power);
+        FR.setPowerPID(-power);
+        FL.setPowerPID(power);
 
         // make motors run to position
         BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -323,10 +323,10 @@ public class Midton extends LinearOpMode {
             FL.setTargetPosition((int) (FL.getCurrentPosition() - (degree * cpd)));
 
             // sets desired power for motors
-            BR.goToPosition(power);
-            BL.goToPosition(-power);
-            FR.goToPosition(power);
-            FL.goToPosition(-power);
+            BR.setPowerPID(power);
+            BL.setPowerPID(-power);
+            FR.setPowerPID(power);
+            FL.setPowerPID(-power);
 
             // make motors run to position
             BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -365,10 +365,10 @@ public class Midton extends LinearOpMode {
             FL.setTargetPosition((int) (FL.getCurrentPosition() + (degree * cpd)));
 
             // sets desired power for motors
-            BR.goToPosition(-power);
-            BL.goToPosition(power);
-            FR.goToPosition(-power);
-            FL.goToPosition(power);
+            BR.setPowerPID(-power);
+            BL.setPowerPID(power);
+            FR.setPowerPID(-power);
+            FL.setPowerPID(power);
 
             // make motors run to position
             BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
