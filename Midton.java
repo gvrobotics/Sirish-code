@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 public class Midton extends LinearOpMode {
 
     double cpi = 0.5; // cycles per inch
-    double cpd = 11; // clicks per degree
+    double cpd = 11; // ticks per degree
 
     public DcMotor BR, BL, FR, FL, Shoot;
 
